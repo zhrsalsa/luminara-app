@@ -1,5 +1,7 @@
 import React from 'react';
+import Octicons from '@expo/vector-icons/Octicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 
@@ -7,12 +9,34 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// Flexible TabBarIcon component
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: string;
   color: string;
+  type: 'Octicons' | 'FontAwesome' | 'MaterialCommunityIcons';
+  size?: number;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  const { name, color, type, size = 28 } = props;
+
+  if (type === 'Octicons') {
+    return <Octicons name={name as React.ComponentProps<typeof Octicons>['name']} size={size} color={color} />;
+  }
+
+  if (type === 'FontAwesome') {
+    return <FontAwesome name={name as React.ComponentProps<typeof FontAwesome>['name']} size={size} color={color} />;
+  }
+
+  if (type === 'MaterialCommunityIcons') {
+    return (
+      <MaterialCommunityIcons
+        name={name as React.ComponentProps<typeof MaterialCommunityIcons>['name']}
+        size={size}
+        color={color}
+      />
+    );
+  }
+
+  return null;
 }
 
 export default function TabLayout() {
@@ -22,15 +46,14 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} type="Octicons" />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -51,14 +74,14 @@ export default function TabLayout() {
         name="two"
         options={{
           title: 'Quiz',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="lightbulb-on-outline" color={color} type="MaterialCommunityIcons" />,
         }}
       />
       <Tabs.Screen
         name="three"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} type="FontAwesome" />,
         }}
       />
     </Tabs>
