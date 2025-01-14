@@ -1,6 +1,5 @@
-// Profile.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
@@ -13,7 +12,7 @@ const firebaseConfig = {
   storageBucket: "bahasaku-eb21d.firebasestorage.app",
   messagingSenderId: "636276077242",
   appId: "1:636276077242:web:aa463e78c2e0385594c883",
-  measurementId: "G-RHC681N2XH"
+  measurementId: "G-RHC681N2XH",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -21,12 +20,11 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const Profile = () => {
-  const [user, setUser] = useState<any>(null); // Store user data
+  const [user, setUser] = useState<any>(null); 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Load user data when authenticated
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -64,7 +62,6 @@ const Profile = () => {
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { name });
 
-      // Update name in Firebase Authentication if changed
       if (user.displayName !== name) {
         await updateProfile(user, { displayName: name });
       }
@@ -90,9 +87,9 @@ const Profile = () => {
       <View style={styles.formGroup}>
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: '#f0f0f0' }]}
           value={email}
-          editable={false} // Make email non-editable
+          editable={false} 
         />
       </View>
       <View style={styles.formGroup}>
@@ -105,8 +102,15 @@ const Profile = () => {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Cancel" onPress={() => Alert.alert('Cancelled', 'No changes were made')} />
-        <Button title="Save" onPress={handleSave} />
+        <TouchableOpacity
+          style={[styles.button, styles.cancelButton]}
+          onPress={() => Alert.alert('Cancelled', 'No changes were made')}
+        >
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -119,8 +123,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: 'rgb(73, 54, 111)',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -129,20 +134,39 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
+    color: 'rgb(73, 54, 111)',
     marginBottom: 5,
-    color: '#4A4A4A',
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    height: 45,
+    borderColor: 'rgb(73, 54, 111)',
     borderWidth: 1,
+    borderRadius: 10,
     paddingLeft: 10,
-    borderRadius: 5,
+    fontSize: 16,
+    color: 'rgb(73, 54, 111)',
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  button: {
+    flex: 1,
+    height: 45,
+    backgroundColor: 'rgb(73, 54, 111)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: '#ccc',
+  },
+  buttonText: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
