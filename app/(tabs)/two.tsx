@@ -8,17 +8,9 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-type RootStackParamList = {
-  QuizDetail: { quiz: Quiz };
-};
-
-type QuizListScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "QuizDetail"
->;
+import { useRouter } from "expo-router";
+import { getAuth } from "firebase/auth"; // Importing Firebase auth
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 type Quiz = {
   id: string;
@@ -30,66 +22,93 @@ type Quiz = {
 };
 
 const QuizList: React.FC = () => {
-  const navigation = useNavigation<QuizListScreenNavigationProp>();
+  const router = useRouter();
   const [quizzes, setQuizzes] = useState<Quiz[]>([
     {
       id: "1",
       title: "Penulisan Huruf Kapital",
       questions: 5,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
     {
       id: "2",
       title: "Penulisan Imbuhan",
       questions: 5,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
     {
       id: "3",
       title: "Penggunaan Partikel",
       questions: 5,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
     {
       id: "4",
       title: "Penulisan Singkatan",
       questions: 5,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
     {
       id: "5",
       title: "Penulisan Angka dan Bilangan",
       questions: 5,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
     {
       id: "6",
       title: "Penulisan Kata Ganti",
       questions: 3,
-      image: require("../../assets/images/card-home.png"),
+      image: require("../../assets/images/card.png"),
       completed: false,
     },
   ]);
 
+  const auth = getAuth();
+  const firestore = getFirestore();
+
   useEffect(() => {
-    initializeQuizProgress();
-  }, []);
+    const loadProgress = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(firestore, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+    
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const quizzesProgress = userData?.quizzesProgress || [];
+    
+          setQuizzes((prev) => {
+            let previousCompleted = true; // Asumsikan kuis pertama tidak dikunci
+            return prev.map((quiz) => {
+              const progress = quizzesProgress.find(
+                (item: Quiz) => item.id === quiz.id
+              );
+              const isCompleted = progress?.completed || false;
+              const isDisabled = !previousCompleted;
+    
+              // Perbarui status previousCompleted untuk kuis berikutnya
+              previousCompleted = isCompleted;
+    
+              return {
+                ...quiz,
+                completed: isCompleted,
+                disabled: isDisabled,
+              };
+            });
+          });
+        }
+      }
+    };    
+  
+    loadProgress();
+  }, []);  
 
-  const initializeQuizProgress = () => {
-    setQuizzes((prev) =>
-      prev.map((quiz, index) => ({
-        ...quiz,
-        disabled: index !== 0 && !prev[index - 1]?.completed,
-      }))
-    );
-  };
-
-  const handleQuizPress = (quiz: Quiz) => {
+  const handleQuizPress = async (quiz: Quiz) => {
     if (quiz.disabled) {
       Alert.alert(
         "Kuis Terkunci",
@@ -97,8 +116,40 @@ const QuizList: React.FC = () => {
       );
       return;
     }
-    navigation.navigate("QuizDetail", { quiz });
-  };
+  
+    const user = auth.currentUser;
+    if (user) {
+      const userRef = doc(firestore, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+  
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const quizzesProgress = userData?.quizzesProgress || [];
+  
+        // Perbarui status kuis yang saat ini dikerjakan
+        const updatedProgress = quizzes.map((item) =>
+          item.id === quiz.id
+            ? { id: item.id, completed: true }
+            : { id: item.id, completed: quizzesProgress.some((q: { id: string; completed: boolean }) => q.id === item.id && q.completed) }
+        );
+  
+        // Simpan progres ke Firestore
+        await setDoc(userRef, { quizzesProgress: updatedProgress }, { merge: true });
+  
+        // Navigasi ke halaman kuis
+        const quizRoutes: { [key: string]: string } = {
+          "1": "../quiz/huruf-kapital",
+          "2": "../quiz/imbuhan",
+          "3": "../quiz/partikel",
+          "4": "../quiz/singkatan",
+          "5": "../quiz/angka-bilangan",
+          "6": "../quiz/kata-ganti",
+        };
+  
+        router.push(quizRoutes[quiz.id] as any || "../quiz");
+      }
+    }
+  };      
 
   const renderQuizCard = ({ item }: { item: Quiz }) => (
     <TouchableOpacity
@@ -168,7 +219,7 @@ const styles = StyleSheet.create({
   },
   quizImage: {
     width: 100,
-    height: 83,
+    height: 145,
     marginRight: 15,
     borderRadius: 8,
   },

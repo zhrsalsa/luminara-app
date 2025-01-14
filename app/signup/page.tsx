@@ -24,6 +24,7 @@ export default function SignupPage() {
         name: username,
         email: email,
         uid: user.uid,
+        quizzesProgress: [],
       });  
       Alert.alert('Registrasi berhasil!', 'Anda akan diarahkan ke halaman login.', [
         { text: 'OK', onPress: () => router.push('/login/page') },
