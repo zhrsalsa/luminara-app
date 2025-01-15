@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, arrayUnion, FieldValue } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
+import * as Progress from 'react-native-progress';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBNu8V547_Eg5hg1_hmbuibGmTf5olOJg",
@@ -51,6 +52,7 @@ const QuizScreen = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [showNextButton, setShowNextButton] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -59,6 +61,7 @@ const QuizScreen = () => {
 
   const loadQuestion = () => {
     setSelectedOption(null);
+    setShowNextButton(false);
   };
 
   const selectOption = (optionNumber: number) => {
@@ -72,6 +75,7 @@ const QuizScreen = () => {
     if (isCorrect) {
       setScore(prevScore => prevScore + 1);
     }
+    setShowNextButton(true);
   };
 
   const nextQuestion = async () => {
@@ -113,11 +117,21 @@ const QuizScreen = () => {
     }
   };
 
+  const progress = (currentQuestionIndex + 1) / questions.length;
+
   const question = questions[currentQuestionIndex];
-  
 
   return (
     <View style={styles.container}>
+      <Progress.Bar 
+        progress={progress} 
+        width={300} 
+        color="#4CAF50" 
+        style={styles.progressBar} 
+      />
+      <Text style={styles.progressText}>
+        {`Pertanyaan ${currentQuestionIndex + 1} dari ${questions.length}`}
+      </Text>
       <Text style={styles.questionText}>{question.question}</Text>
       <View style={styles.options}>
         {question.options.map((option, index) => (
@@ -125,9 +139,13 @@ const QuizScreen = () => {
             key={index}
             style={[
               styles.optionCard,
-              selectedOption === index && {
-                backgroundColor: index === question.correctAnswer ? '#4CAF50' : '#D32F2F',
-              },
+              selectedOption !== null &&
+                index === question.correctAnswer &&
+                { backgroundColor: "#4CAF50" }, // Warna hijau untuk jawaban benar
+              selectedOption !== null &&
+                selectedOption === index &&
+                selectedOption !== question.correctAnswer &&
+                { backgroundColor: "#D32F2F" }, // Warna merah untuk jawaban salah
             ]}
             onPress={() => selectOption(index)}
             disabled={selectedOption !== null}
@@ -136,13 +154,14 @@ const QuizScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
+      {showNextButton && ( // Tampilkan tombol "Lanjut" hanya jika jawaban telah dipilih
       <TouchableOpacity
         style={styles.nextButton}
         onPress={nextQuestion}
-        disabled={selectedOption === null}
       >
         <Text style={styles.nextButtonText}>Lanjut</Text>
       </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -154,6 +173,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#1e1e2e',
     padding: 20,
+  },
+  progressBar: {
+    marginBottom: 10,
+  },
+  progressText: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 20,
   },
   questionText: {
     color: '#fff',
