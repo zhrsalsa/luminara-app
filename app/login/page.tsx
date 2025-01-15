@@ -1,7 +1,7 @@
 // app/login/page.tsx
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Text, TextInput, TouchableOpacity, View, StyleSheet, Alert } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, Alert, Image } from "react-native";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -41,36 +41,36 @@ export default function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.formBox}>
-        <Text style={styles.header}>Login</Text>
-        <View style={styles.inputGroup}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-        </View>
-        <View style={styles.inputGroup}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-        </View>
-        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-          <Text style={styles.btnText}>Login</Text>
-        </TouchableOpacity>
-        <Text style={styles.signupText}>
-          Belum punya akun?{" "}
-          <Text style={styles.signupLink} onPress={() => router.push("/signup/page")}>
-            Sign Up
-          </Text>
-        </Text>
+      <Image source={require('../../assets/images/wand.png')} style={styles.wandImage} />
+      <Text style={styles.header}>Login</Text>
+      <View style={styles.inputGroup}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+          />
       </View>
+      <View style={styles.inputGroup}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+          />
+      </View>
+      <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      
+      <Text style={styles.footerText}>
+        Belum memiliki akun?{' '}
+        <Text style={styles.link} onPress={() => router.push('/signup/page')}>
+          Login
+        </Text>
+      </Text>
     </View>
   );
 }
@@ -78,9 +78,10 @@ export default function LoginPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    paddingTop: 50,
+    paddingHorizontal: 20,
   },
   logo: {
     fontSize: 28,
@@ -88,19 +89,20 @@ const styles = StyleSheet.create({
     color: "#FFDD57",
     marginBottom: 30,
   },
-  formBox: {
+  wandImage: {
     width: 350,
-    padding: 20,
-    borderRadius: 20,
-    backgroundColor: "white",
-    boxShadow: "0 4px 10px rgba(197, 139, 39, 0.648)",
-    alignItems: "center",
+    height: 200,
+    resizeMode: 'contain',
+    marginBottom: 10,
+    transform: [{scaleX: -1}],
   },
   header: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: "rgb(73, 54, 111)",
+    fontFamily: 'serif',
+    color: 'rgb(73, 54, 111)',
     marginBottom: 20,
+    textAlign: 'left',
   },
   inputGroup: {
     marginBottom: 20,
@@ -128,16 +130,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
-  btnText: {
-    color: "white",
+  buttonText: {
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
-  signupText: {
+  footerText: {
     fontSize: 14,
-    textAlign: "center",
+    marginTop: 15,
+    alignSelf: 'center',
   },
-  signupLink: {
-    fontWeight: "bold",
-    color: "rgb(73, 54, 111)",
+  link: {
+    color: 'rgb(73, 54, 111)',
+    fontWeight: 'bold',
   },
 });
