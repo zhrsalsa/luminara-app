@@ -1,9 +1,27 @@
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import SplashScreen from './SplashScreen'; // Import SplashScreen
 
 export default function HomePage() {
+  const [isSplashVisible, setSplashVisible] = useState(true);
   const router = useRouter();
 
+  useEffect(() => {
+    // Durasi splash screen (misalnya 3 detik)
+    const timer = setTimeout(() => {
+      setSplashVisible(false); // Hapus splash screen
+    }, 10000);
+
+    return () => clearTimeout(timer); // Bersihkan timer saat komponen di-unmount
+  }, []);
+
+  if (isSplashVisible) {
+    // Jika splash screen aktif, tampilkan SplashScreen
+    return <SplashScreen />;
+  }
+
+  // Halaman utama setelah splash screen selesai
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
@@ -36,23 +54,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#492a6f',
-    justifyContent: 'space-between', // Ensures content at top and buttons at bottom
-  },
-  header: {
-    paddingTop: 20,
-    paddingBottom: 10,
-    backgroundColor: '#492a6f',
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-  },
-  logo: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#ffdd57',
+    justifyContent: 'space-between',
   },
   hero: {
     flexDirection: 'row',
-    justifyContent: 'center', // Center the text
+    justifyContent: 'center',
     padding: 20,
     flexGrow: 1,
     alignItems: 'center',
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
   heroContent: {
     maxWidth: 600,
     flex: 1,
-    alignItems: 'center', // Center the content horizontally
+    alignItems: 'center',
   },
   heroTitle: {
     color: '#fff',
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
     color: '#ffdd57',
   },
   buttonsContainer: {
-    paddingBottom: 40, // Add space from the bottom of the screen
+    paddingBottom: 40,
   },
   button: {
     backgroundColor: '#ffdd57',
