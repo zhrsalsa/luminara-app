@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import SplashScreen from './SplashScreen'; // Import SplashScreen
+import { useRouter, Stack } from 'expo-router';
+import SplashScreen from './SplashScreen'; 
 
 export default function HomePage() {
   const [isSplashVisible, setSplashVisible] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Durasi splash screen (misalnya 3 detik)
     const timer = setTimeout(() => {
-      setSplashVisible(false); // Hapus splash screen
+      setSplashVisible(false); 
     }, 10000);
 
-    return () => clearTimeout(timer); // Bersihkan timer saat komponen di-unmount
+    return () => clearTimeout(timer); 
   }, []);
 
   if (isSplashVisible) {
-    // Jika splash screen aktif, tampilkan SplashScreen
     return <SplashScreen />;
   }
 
-  // Halaman utama setelah splash screen selesai
+
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <View style={styles.container}>
       <View style={styles.hero}>
         <View style={styles.heroContent}>
@@ -47,6 +47,7 @@ export default function HomePage() {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 }
 

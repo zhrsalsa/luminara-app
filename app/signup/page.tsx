@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Stack } from 'expo-router';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { auth, firestore, createUserWithEmailAndPassword, updateProfile } from '../../firebase';
@@ -40,6 +41,8 @@ export default function SignupPage() {
   };
 
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <View style={styles.container}>
       <Image source={require('../../assets/images/wand.png')} style={styles.wandImage} />
       <Text style={styles.header}>Sign Up</Text>
@@ -84,6 +87,7 @@ export default function SignupPage() {
         </Text>
       </Text>
     </View>
+    </>
   );
 }
 

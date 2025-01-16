@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { NavigationProp } from '@react-navigation/native';
+import { Stack } from 'expo-router';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBNu8V547_Eg5hg1_hmbuibGmTf5olOJg",

@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView 
 import { getAuth, onAuthStateChanged, updateProfile, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { router } from 'expo-router'; 
+import { router, Stack } from 'expo-router'; 
 
 // Firebase config (use your own config)
 const firebaseConfig = {

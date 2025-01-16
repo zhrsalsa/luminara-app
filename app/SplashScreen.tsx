@@ -1,9 +1,12 @@
 import React from 'react';
+import { Stack } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 const SplashScreen = () => {
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <View style={styles.container}>
       <LottieView
         source={require('../assets/splash.json')} // Lokasi file JSON Lottie Anda
@@ -12,6 +15,7 @@ const SplashScreen = () => {
         style={styles.animation}
       />
     </View>
+    </>
   );
 };
 

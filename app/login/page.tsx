@@ -1,6 +1,7 @@
 // app/login/page.tsx
+import React from "react";
 import { useState } from "react";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { Text, TextInput, TouchableOpacity, View, StyleSheet, Alert, Image } from "react-native";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -40,6 +41,8 @@ export default function LoginPage() {
   };  
 
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <View style={styles.container}>
       <Image source={require('../../assets/images/wand.png')} style={styles.wandImage} />
       <Text style={styles.header}>Login</Text>
@@ -72,6 +75,7 @@ export default function LoginPage() {
         </Text>
       </Text>
     </View>
+    </>
   );
 }
 

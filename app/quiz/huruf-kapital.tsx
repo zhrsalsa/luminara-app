@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, arrayUnion, FieldValue } from 'firebase/firestore';
-import { useRouter } from 'expo-router';
+import { useRouter, Stack } from 'expo-router';
 import * as Progress from 'react-native-progress';
 
 const firebaseConfig = {
@@ -122,6 +122,8 @@ const QuizScreen = () => {
   const question = questions[currentQuestionIndex];
 
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <View style={styles.container}>
       <Progress.Bar 
         progress={progress} 
@@ -163,6 +165,7 @@ const QuizScreen = () => {
       </TouchableOpacity>
       )}
     </View>
+    </>
   );
 };
 
