@@ -68,7 +68,7 @@ export default function LoginPage() {
       <Text style={styles.footerText}>
         Belum memiliki akun?{' '}
         <Text style={styles.link} onPress={() => router.push('/signup/page')}>
-          Login
+          Sign Up
         </Text>
       </Text>
     </View>

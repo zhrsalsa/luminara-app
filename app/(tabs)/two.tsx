@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { getAuth } from "firebase/auth"; // Importing Firebase auth
+import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 type Quiz = {
@@ -83,7 +83,7 @@ const QuizList: React.FC = () => {
           const quizzesProgress = userData?.quizzesProgress || [];
     
           setQuizzes((prev) => {
-            let previousCompleted = true; // Asumsikan kuis pertama tidak dikunci
+            let previousCompleted = true;
             return prev.map((quiz) => {
               const progress = quizzesProgress.find(
                 (item: Quiz) => item.id === quiz.id
@@ -91,7 +91,6 @@ const QuizList: React.FC = () => {
               const isCompleted = progress?.completed || false;
               const isDisabled = !previousCompleted;
     
-              // Perbarui status previousCompleted untuk kuis berikutnya
               previousCompleted = isCompleted;
     
               return {
@@ -126,17 +125,14 @@ const QuizList: React.FC = () => {
         const userData = userDoc.data();
         const quizzesProgress = userData?.quizzesProgress || [];
   
-        // Perbarui status kuis yang saat ini dikerjakan
         const updatedProgress = quizzes.map((item) =>
           item.id === quiz.id
             ? { id: item.id, completed: true }
             : { id: item.id, completed: quizzesProgress.some((q: { id: string; completed: boolean }) => q.id === item.id && q.completed) }
         );
   
-        // Simpan progres ke Firestore
         await setDoc(userRef, { quizzesProgress: updatedProgress }, { merge: true });
   
-        // Navigasi ke halaman kuis
         const quizRoutes: { [key: string]: string } = {
           "1": "../quiz/huruf-kapital",
           "2": "../quiz/imbuhan",
@@ -152,10 +148,7 @@ const QuizList: React.FC = () => {
   };      
 
   const renderQuizCard = ({ item }: { item: Quiz }) => (
-    <TouchableOpacity
-      style={[styles.quizCard, item.disabled && styles.disabled]}
-      onPress={() => handleQuizPress(item)}
-    >
+    <View style={[styles.quizCard, item.disabled && styles.disabled]}>
       <Image source={item.image} style={styles.quizImage} />
       <View style={styles.quizInfo}>
         <Text style={styles.quizTitle}>{item.title}</Text>
@@ -165,18 +158,20 @@ const QuizList: React.FC = () => {
         style={[
           styles.quizButton,
           item.completed && styles.completedButton,
+          item.disabled && styles.disabledButton,
         ]}
+        onPress={() => handleQuizPress(item)}
+        disabled={item.disabled} 
       >
         <Text style={styles.buttonText}>
           {item.completed ? "Ulangi" : "Mulai"}
         </Text>
       </TouchableOpacity>
-    </TouchableOpacity>
-  );
+    </View>
+  );  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Daftar Kuis</Text>
       <FlatList
         data={quizzes}
         renderItem={renderQuizCard}
@@ -242,6 +237,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
   },
+  disabledButton: {
+    backgroundColor: "#ddd",
+  },  
   completedButton: {
     backgroundColor: "#c2e5fc",
   },
