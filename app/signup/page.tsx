@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   inputGroup: {
-    width: '98%',
     marginBottom: 15,
+    width: '100%',
   },
   label: {
     fontSize: 15,
