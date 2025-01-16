@@ -1,5 +1,5 @@
 import React from 'react';
-import Octicons from '@expo/vector-icons/Octicons';
+import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link, Tabs } from 'expo-router';
@@ -9,17 +9,16 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
-// Flexible TabBarIcon component
 function TabBarIcon(props: {
   name: string;
   color: string;
-  type: 'Octicons' | 'FontAwesome' | 'MaterialCommunityIcons';
+  type: 'Entypo' | 'FontAwesome' | 'MaterialCommunityIcons';
   size?: number;
 }) {
-  const { name, color, type, size = 28 } = props;
+  const { name, color, type, size = 25 } = props;
 
-  if (type === 'Octicons') {
-    return <Octicons name={name as React.ComponentProps<typeof Octicons>['name']} size={size} color={color} />;
+  if (type === 'Entypo') {
+    return <Entypo name={name as React.ComponentProps<typeof Entypo>['name']} size={size} color={color} />;
   }
 
   if (type === 'FontAwesome') {
@@ -53,7 +52,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} type="Octicons" />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} type="Entypo" />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>

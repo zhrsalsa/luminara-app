@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingTop: 40,
     paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
   welcomeSection: {
     flexDirection: 'row',
