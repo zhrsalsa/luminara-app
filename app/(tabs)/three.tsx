@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
-import { getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, updateProfile, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
+import { router } from 'expo-router'; 
 
 // Firebase config (use your own config)
 const firebaseConfig = {
@@ -24,19 +25,20 @@ const Profile = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingOut, setIsLoggingOut] = useState(false); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         await loadUserProfile(user);
-      } else {
+      } else if (!isLoggingOut) {
         Alert.alert('Error', 'You must be logged in to view the profile.');
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [isLoggingOut]);
 
   const loadUserProfile = async (user: any) => {
     try {
@@ -70,6 +72,22 @@ const Profile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       Alert.alert('Error', 'Failed to update profile.');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true); // Set flag sebelum logout
+      console.log('Attempting to logout...');
+      await signOut(auth);
+      console.log('Logout successful!');
+      router.replace('/login/page');
+      console.log('Redirecting to login page...');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      console.log('Logout failed!');
+      Alert.alert('Error', 'Failed to log out.');
+      setIsLoggingOut(false); // Reset flag jika terjadi error
     }
   };
 
@@ -112,6 +130,13 @@ const Profile = () => {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </View>
+      
+      <TouchableOpacity 
+        style={[styles.button, styles.logoutButton]} 
+        onPress={handleLogout}
+      >
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -162,6 +187,13 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: '#ccc',
+  },
+  logoutButton: {
+    marginTop: 30,
+    height: 45,
+    backgroundColor: '#dc3545',
+    flex: 0,
+    width: '100%',
   },
   buttonText: {
     fontSize: 16,
