@@ -93,7 +93,6 @@ const Profile = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Profile</Text>
       <View style={styles.formGroup}>
         <Text style={styles.label}>Name</Text>
         <TextInput
