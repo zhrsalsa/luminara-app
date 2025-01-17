@@ -14,13 +14,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hananfs.luminara"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.hananfs.luminara"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +34,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "02fbc2d0-27ef-4a0d-a517-2e330908debf"
+      }
     }
   }
 }
