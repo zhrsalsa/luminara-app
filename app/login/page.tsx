@@ -28,7 +28,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Login berhasil!");
-      router.push("/two");
+      router.push("/(tabs)");
     } catch (error: unknown) {
       if (error instanceof Error) {
         // Jika error adalah instance dari Error, akses message-nya

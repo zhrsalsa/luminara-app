@@ -85,7 +85,7 @@ const QuizScreen = () => {
     } else {
       await saveProgressToFirestore();
       Alert.alert('Kuis Selesai', `Skor Anda: ${score}`);
-      router.push('../two');
+      router.replace('/(tabs)');
     }
   };
 
