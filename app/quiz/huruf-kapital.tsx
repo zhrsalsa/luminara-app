@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Image } from 'react-native';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, arrayUnion, FieldValue } from 'firebase/firestore';
@@ -189,12 +189,16 @@ const QuizScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
+          <Image
+              source={require('../../assets/images/candle.png')} // Path relatif gambar
+              style={styles.modalImage} // Gaya untuk gambar
+            />
             <Text style={styles.modalText}>Apakah Anda ingin keluar?</Text>
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.modalButton} onPress={handleCancelExit}>
+              <TouchableOpacity style={styles.modalButtonKeep} onPress={handleCancelExit}>
                 <Text style={styles.modalButtonText}>Lanjut</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={handleConfirmExit}>
+              <TouchableOpacity style={styles.modalButtonExit} onPress={handleConfirmExit}>
                 <Text style={styles.modalButtonText}>Keluar</Text>
               </TouchableOpacity>
             </View>
@@ -283,13 +287,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
+  modalImage: {
+    width: 100,
+    height: 150,
+    marginBottom: 20,
+  },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
   },
-  modalButton: {
+  modalButtonKeep: {
     backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  modalButtonExit: {
+    backgroundColor: '#D32F2F',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
