@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal } from 'react-native';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, arrayUnion, FieldValue } from 'firebase/firestore';
@@ -52,6 +52,7 @@ const QuizScreen = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [showExitModal, setShowExitModal] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
   const router = useRouter();
 
@@ -121,6 +122,19 @@ const QuizScreen = () => {
 
   const question = questions[currentQuestionIndex];
 
+  const handleExit = () => {
+    setShowExitModal(true);
+  };
+
+  const handleCancelExit = () => {
+    setShowExitModal(false);
+  };
+  
+  const handleConfirmExit = () => {
+    setShowExitModal(false);
+    router.push('../(tabs)/two');
+  };
+
   return (
     <>
     <Stack.Screen options={{ headerShown: false }} />
@@ -143,11 +157,11 @@ const QuizScreen = () => {
               styles.optionCard,
               selectedOption !== null &&
                 index === question.correctAnswer &&
-                { backgroundColor: "#4CAF50" }, // Warna hijau untuk jawaban benar
+                { backgroundColor: "#4CAF50" },
               selectedOption !== null &&
                 selectedOption === index &&
                 selectedOption !== question.correctAnswer &&
-                { backgroundColor: "#D32F2F" }, // Warna merah untuk jawaban salah
+                { backgroundColor: "#D32F2F" },
             ]}
             onPress={() => selectOption(index)}
             disabled={selectedOption !== null}
@@ -156,7 +170,7 @@ const QuizScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {showNextButton && ( // Tampilkan tombol "Lanjut" hanya jika jawaban telah dipilih
+      {showNextButton && (
       <TouchableOpacity
         style={styles.nextButton}
         onPress={nextQuestion}
@@ -164,6 +178,29 @@ const QuizScreen = () => {
         <Text style={styles.nextButtonText}>Lanjut</Text>
       </TouchableOpacity>
       )}
+      <TouchableOpacity style={styles.exitButton} onPress={handleExit}>
+        <Text style={styles.exitButtonText}>X</Text>
+      </TouchableOpacity>
+      <Modal
+        visible={showExitModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleCancelExit}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Apakah Anda ingin keluar?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={styles.modalButton} onPress={handleCancelExit}>
+                <Text style={styles.modalButtonText}>Lanjut</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={handleConfirmExit}>
+                <Text style={styles.modalButtonText}>Keluar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>      
     </View>
     </>
   );
@@ -215,6 +252,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  exitButton: {
+    position: 'absolute',
+    top: 50,
+    left: 13,
+    borderRadius: 50,
+    padding: 10,
+  },
+  exitButtonText: {
+    color: '#fff',
+    fontSize: 20,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: 300,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  modalButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  modalButtonText: {
     color: '#fff',
     fontSize: 16,
   },

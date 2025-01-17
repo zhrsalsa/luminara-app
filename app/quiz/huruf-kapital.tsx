@@ -123,16 +123,16 @@ const QuizScreen = () => {
   const question = questions[currentQuestionIndex];
 
   const handleExit = () => {
-    setShowExitModal(true); // Menampilkan modal saat tombol keluar ditekan
+    setShowExitModal(true); 
   };
 
   const handleCancelExit = () => {
-    setShowExitModal(false); // Menutup modal saat tombol cancel ditekan
+    setShowExitModal(false);
   };
   
   const handleConfirmExit = () => {
-    setShowExitModal(false); // Menutup modal setelah memilih keluar
-    router.push('../(tabs)/two'); // Arahkan ke halaman beranda atau halaman yang diinginkan
+    setShowExitModal(false);
+    router.push('../(tabs)/two');
   };
 
   return (
@@ -157,11 +157,11 @@ const QuizScreen = () => {
               styles.optionCard,
               selectedOption !== null &&
                 index === question.correctAnswer &&
-                { backgroundColor: "#4CAF50" }, // Warna hijau untuk jawaban benar
+                { backgroundColor: "#4CAF50" },
               selectedOption !== null &&
                 selectedOption === index &&
                 selectedOption !== question.correctAnswer &&
-                { backgroundColor: "#D32F2F" }, // Warna merah untuk jawaban salah
+                { backgroundColor: "#D32F2F" },
             ]}
             onPress={() => selectOption(index)}
             disabled={selectedOption !== null}
@@ -170,7 +170,7 @@ const QuizScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {showNextButton && ( // Tampilkan tombol "Lanjut" hanya jika jawaban telah dipilih
+      {showNextButton && (
       <TouchableOpacity
         style={styles.nextButton}
         onPress={nextQuestion}
@@ -181,7 +181,6 @@ const QuizScreen = () => {
       <TouchableOpacity style={styles.exitButton} onPress={handleExit}>
         <Text style={styles.exitButtonText}>X</Text>
       </TouchableOpacity>
-      {/* Modal konfirmasi keluar */}
       <Modal
         visible={showExitModal}
         transparent={true}
