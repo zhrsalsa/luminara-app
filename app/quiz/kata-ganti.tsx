@@ -122,7 +122,7 @@ const QuizScreen = () => {
   
   const handleConfirmExit = () => {
     setShowExitModal(false);
-    router.push('../(tabs)/two');
+    router.push('/(tabs)');
   };
 
   return (
