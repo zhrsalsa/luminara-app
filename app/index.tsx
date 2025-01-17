@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import SplashScreen from './SplashScreen'; 
 
@@ -26,6 +26,10 @@ export default function HomePage() {
     <View style={styles.container}>
       <View style={styles.hero}>
         <View style={styles.heroContent}>
+        <Image 
+              source={require('../assets/images/door.png')}
+              style={styles.heroImage}
+            />
           <Text style={styles.heroTitle}>
             Belajar bahasa indonesia dengan <Text style={styles.highlight}>Luminara</Text>
           </Text>
@@ -75,6 +79,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'Poppins'
   },
   highlight: {
     color: '#ffdd57',
@@ -102,5 +107,10 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     color: '#492a6f',
+  },
+  heroImage: {
+    width: 300, 
+    height: 300, 
+    marginBottom: 20, 
   },
 });

@@ -42,10 +42,6 @@ type Quiz = {
 const Home = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
   const router = useRouter();
   const [userName, setUserName] = useState<string | null>(null);
-  const [fontsLoaded] = useFonts({
-    'IM-Fell-English-SC': require('../assets/fonts/IMFellEnglishSC-Regular.ttf'),
-    'Poppins': require('../assets/fonts/Poppins-Regular.ttf'),
-  });
   const [quizzes, setQuizzes] = useState<Quiz[]>([
     {
       id: "1",
@@ -210,25 +206,6 @@ const Home = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
         </View>
       </View>
 
-      <View style={styles.featuresContainer}>
-        <TouchableOpacity style={styles.featureBox}>
-          <Image
-            source={require('../../assets/images/buku-home.png')}
-            style={styles.featureImage}
-          />
-          <Text style={styles.featureTitle}>Belajar Kosakata</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.featureBox}
-          onPress={() => navigation.navigate('Jelajah')}>
-          <Image
-            source={require('../../assets/images/footsteps.png')}
-            style={styles.featureImage}
-          />
-          <Text style={styles.featureTitle}>Jelajah Bahasa</Text>
-        </TouchableOpacity>
-      </View>
-
       <Text style={styles.sectionTitle}>Kuis Bahasa</Text>
       <View>{quizzes.map(renderQuizCard)}</View>
     </ScrollView>
@@ -241,14 +218,12 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     backgroundColor: 'white',
-    fontFamily: 'Poppins',
   },
   welcomeSection: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
     marginBottom: 30,
-    fontFamily: 'IM-Fell-English-SC'
   },
   headerImage: {
     width: 120,
@@ -259,10 +234,11 @@ const styles = StyleSheet.create({
     flex: 1, 
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 27,
     fontWeight: '600',
     color: '#49366F',
     flexWrap: 'wrap',
+    fontFamily: 'IMFellEnglishSC',
   },
   subtitle: {
     fontSize: 16,
@@ -298,6 +274,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#49366F',
     textAlign: 'center',
+    fontFamily: 'Poppins',
   },
   title: {
     fontSize: 24,
