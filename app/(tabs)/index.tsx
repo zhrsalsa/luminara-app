@@ -5,6 +5,7 @@ import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { NavigationProp } from '@react-navigation/native';
 import { useRouter, Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBNu8V547_Eg5hg1_hmbuibGmTf5olOJg",
@@ -41,6 +42,10 @@ type Quiz = {
 const Home = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
   const router = useRouter();
   const [userName, setUserName] = useState<string | null>(null);
+  const [fontsLoaded] = useFonts({
+    'IM-Fell-English-SC': require('../assets/fonts/IMFellEnglishSC-Regular.ttf'),
+    'Poppins': require('../assets/fonts/Poppins-Regular.ttf'),
+  });
   const [quizzes, setQuizzes] = useState<Quiz[]>([
     {
       id: "1",
@@ -236,12 +241,14 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     backgroundColor: 'white',
+    fontFamily: 'Poppins',
   },
   welcomeSection: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
     marginBottom: 30,
+    fontFamily: 'IM-Fell-English-SC'
   },
   headerImage: {
     width: 120,
